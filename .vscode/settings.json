@@ -1,0 +1,9 @@
+{
+    "java.format.settings.url": ".vscode/java-formatter.xml",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "editor.defaultFormatter": "vscjava.vscode-maven",
+    "editor.formatOnSave": true,
+    "[java]": {
+        "editor.defaultFormatter": "redhat.java"
+    }
+}
