@@ -9,8 +9,8 @@ import com.world.Tiles.TileWater;
 import com.world.Utils.OpenSimplexNoise;
 
 public class Map {
-    static public int MAP_TILES_X = 1000;
-    static public int MAP_TILES_Y = 500;
+    static public int MAP_TILES_X = 400;
+    static public int MAP_TILES_Y = 300;
     public int e = 0;
 
     public Tile[][] tiles;
@@ -71,5 +71,18 @@ public class Map {
                 }
             }
         }
+    }
+
+    public static int getDistance(Tile t1, Life t2) {
+
+        if (t1 == null) {
+            return Life.VISION_RANGE;
+        }
+        int x1 = t1.x;
+        int y1 = t1.y;
+        int x2 = t2.x;
+        int y2 = t2.y;
+
+        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
     }
 }

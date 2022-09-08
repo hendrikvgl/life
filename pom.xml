@@ -105,6 +105,7 @@
             <mainClass>com.world.App</mainClass>
             <arguments>
                 <argument>-XstartOnFirstThread</argument>
+                <argument>-Xmx4g</argument>
             </arguments>
         </configuration>
     </plugin>

@@ -12,6 +12,7 @@ public class App {
 	public static double treeFactor = 11;
 	public static long worldSeed = "GANDALF".hashCode();
 	public static Random rng = new Random(App.worldSeed);
+	public static int TICKRATE = 200;
 
 	public static void main(String[] args) {
 
