@@ -13,4 +13,9 @@ public class Memory {
     public void setFitness(double f) {
         this.fitness = f;
     }
+
+    @Override
+    public int hashCode() {
+        return Integer.parseInt(activity + "" + param);
+    }
 }

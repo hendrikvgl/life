@@ -35,16 +35,16 @@ public class LifeController {
                     if (mem.size() > 0) {
                         Memory lastMem = mem.getLast();
                         lastMem.setFitness(dF);
+
                         LinkedList<Memory> buffer = new LinkedList<Memory>();
-                        for (Memory cm : mem) {
-                            if (cm.param != lastMem.param || cm.activity != lastMem.activity) {
-                                if (cm.fitness > 0) {
-                                    buffer.add(cm);
-                                }
+
+                        for (Iterator<Memory> i = mem.descendingIterator(); i.hasNext();) {
+                            Memory item = i.next();
+                            if (item.fitness > 0 && !buffer.contains(item)) {
+                                buffer.add(item);
                             }
                         }
                         mem = buffer;
-
                     }
 
                     Collections.sort(mem, new Comparator<Memory>() {
@@ -77,7 +77,6 @@ public class LifeController {
                         int index = 0;
                         for (Iterator<Memory> i = mem.iterator(); i.hasNext();) {
                             Memory item = i.next();
-                            // System.out.println("p: " + item.param + "; f: " + item.fitness);
                             fit[index] = item.fitness;
                             sum += item.fitness;
                             index++;
@@ -113,9 +112,12 @@ public class LifeController {
                 }
                 long endTime = System.nanoTime();
                 long totalTime = endTime - startTime;
-                System.out.println(lm.getLifes().size());
-                // System.out.println(TimeUnit.MILLISECONDS.convert(totalTime,
-                // TimeUnit.NANOSECONDS));
+                // TimeUnit.MILLISECONDS.convert(totalTime, TimeUnit.NANOSECONDS)
+                if (tick % (App.TICKRATE * 10) == 0) {
+                    System.out.println("Lifes: " + lm.getLifes().size());
+                    System.out
+                            .println("Seconds elapsed: " + TimeUnit.SECONDS.convert(totalTime, TimeUnit.MILLISECONDS));
+                }
             }
         }, 0, App.TICKRATE);
     }

@@ -9,8 +9,8 @@ import com.world.Tiles.TileWater;
 import com.world.Utils.OpenSimplexNoise;
 
 public class Map {
-    static public int MAP_TILES_X = 400;
-    static public int MAP_TILES_Y = 300;
+    static public int MAP_TILES_X = 200;
+    static public int MAP_TILES_Y = 200;
     public int e = 0;
 
     public Tile[][] tiles;

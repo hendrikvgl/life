@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.world.Tiles.Tile;
 import com.world.Tiles.TileFood;
+import com.world.Tiles.TileWater;
 
 public class Life {
     public int x;
@@ -20,6 +21,7 @@ public class Life {
     @JsonIgnore
     public ArrayList<Tile> vision;
     public double hunger = 100;
+    public double thirst = 100;
     public double fitness;
     public double prevFitness;
     public int e = 0;
@@ -44,14 +46,17 @@ public class Life {
 
     public void onTick(double d) {
         this.hunger -= 0.2;
-        if (Map.getDistance(getClosestFood(), this) == 0) {
+        this.thirst -= 0.4;
+        if (Map.getDistance(getClosest(TileFood.class), this) == 0) {
             this.hunger = 100;
         }
-        if (this.hunger < 0) {
+        if (Map.getDistance(getClosest(TileWater.class), this) == 0) {
+            this.thirst = 100;
+        }
+        if (this.hunger < 0 || this.thirst < 0) {
             lm.reportDead(index);
         }
-
-        this.fitness = hunger + foodMotivation();
+        this.fitness = foodMotivation() + waterMotivation();
         double b = this.busyDur - d;
         if (b < 0) {
             this.busyDur = 0;
@@ -61,13 +66,13 @@ public class Life {
         this.idle = busyDur == 0;
     }
 
-    public Tile getClosestFood() {
+    public Tile getClosest(Class cl) {
         vision = map.getTiles(x, y, VISION_RANGE);
         Tile closestTile = null;
         int closestDistance = 5000;
 
         for (Tile t : vision) {
-            if (t.getClass() == TileFood.class) {
+            if (t.getClass() == cl) {
                 int dis = Map.getDistance(t, this);
                 if (closestTile == null || closestDistance > dis) {
                     closestTile = t;
@@ -128,18 +133,29 @@ public class Life {
 
         this.y += dY;
         this.x += dX;
-        this.busyDur += App.TICKRATE;
+        this.busyDur += 400;
     }
 
-    private int foodMotivation() {
+    private double foodMotivation() {
         if (this.map == null) {
             return 0;
         }
-        Tile cf = getClosestFood();
+        Tile cf = getClosest(TileFood.class);
         if (cf == null) {
             return 0;
         }
-        return (100 - (int) hunger) * (VISION_RANGE - Map.getDistance(cf, this));
+        return hunger + (100 - hunger) * (VISION_RANGE - Map.getDistance(cf, this)) / 2;
+    }
+
+    private double waterMotivation() {
+        if (this.map == null) {
+            return 0;
+        }
+        Tile cf = getClosest(TileWater.class);
+        if (cf == null) {
+            return 0;
+        }
+        return thirst + (100 - thirst) * (VISION_RANGE - Map.getDistance(cf, this)) / 2;
     }
 
 }
